@@ -1,0 +1,18 @@
+<head>
+  <title>Readthat</title>
+</head>
+
+Usuários:
+{% if users %}
+  {% for user in users %}
+    <p>
+      <b>nome:</b> {{ user.username }} <br />
+      <b>email:</b> {{ user.email }}
+    </p>
+    <hr />
+  {% endfor %}
+{% else %}
+  <p>
+    Sem usuários
+  </p>
+{% endif %}
