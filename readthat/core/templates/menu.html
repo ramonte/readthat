@@ -1,20 +1,24 @@
 <head>
   <title>Readthat</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script src="http://materializecss.com/templates/starter-template/js/init.js"></script>
 </head>
 
-Usuários:
-{% if users %}
-  {% for user in users %}
-    <p>
-      <b>nome:</b> {{ user.username }} <br />
-      <b>email:</b> {{ user.email }}
-    </p>
-    <hr />
-  {% endfor %}
-{% else %}
-  <p>
-    Sem usuários
-  </p>
-{% endif %}
+<nav class="nav-extended">
+  <div class="nav-wrapper lime lighten-4">
+    <a href="/" class="brand-logo right" style="color: black">READTHAT</a>
+    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons" style="color: black">menu</i></a>
+    <ul class="left hide-on-med-and-down" id="nav-mobile">
+      <li><a href="/new" style="color: black">New</a></li>
+      <li><a href="/hot" style="color: black">Hot</a></li>
+      <li><a href="/top" style="color: black">Top</a></li>
+    </ul>
+    <ul class="side-nav" id="mobile-demo">
+      <li><a href="#" style="color: black">New</a></li>
+      <li><a href="#" style="color: black">Hot</a></li>
+      <li><a href="#" style="color: black">Top</a></li>
+    </ul>
+  </div>
+</nav>
