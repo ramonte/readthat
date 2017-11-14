@@ -7,9 +7,9 @@
 {% if forum %}
   {% for f in forum %}
     <p>
-      <b>título:</b> {{ f.title }} <br />
-      <b>usuário:</b> {{ f.user }} <br />
-      <b>livro:</b> {{ f.book.title }}
+      <a href="{% url 'details' f.id %}">{{ f.title }}</a> <br />
+      <b>Comentários:</b> {{ f.num_comments }} <br />
+      <b>Upvotes:</b> {{ f.upvotes }}
     </p>
     <hr />
   {% endfor %}

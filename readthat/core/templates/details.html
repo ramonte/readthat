@@ -1,0 +1,35 @@
+{% include "menu.html" %}
+
+<div class="lime lighten-4">
+
+{% if forum %}
+    <p>
+      <!-- <b>título:</b> {{ forum.title }} <br /> -->
+      <h4 align=center>{{ forum.title }}</h4>
+      <b>usuário:</b> {{ forum.user }} <br />
+      <b>livro:</b> {{ forum.book.title }} <br />
+      <b>Descrição:</b> {{ forum.description }}
+    </p>
+    <hr />
+{% else %}
+  <p>
+    Erro ao carregar forum.
+  </p>
+{% endif %}
+
+<h4>Comentários:</h4>
+{% if comments %}
+  {% for comment in comments %}
+    <b>Autor:</b> {{ comment.user }}. <b>Data:</b> {{ comment.date|date:"d/m/Y, H:i:s" }}. <b>Upvotes:</b> {{comment.upvotes }}
+    <p>
+      {{ comment.description }}
+    </p>
+
+  {% endfor %}
+{% else %}
+  <p>
+    Ainda não há comentários nesta discussão.
+  </p>
+{% endif %}
+
+</div>

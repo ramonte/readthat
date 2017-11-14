@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Count
 import logging
@@ -18,7 +18,7 @@ def index(request):
     return render(request, 'menu.html', context)
 
 def new(request):
-    forum = models.Forum.objects.order_by('-creation')[:5]
+    forum = models.Forum.objects.annotate(num_comments=Count('comentary__forum')).order_by('-creation')[:5]
     context = {
         'forum': forum,
     }
@@ -37,3 +37,13 @@ def hot(request):
         'forum': forum,
     }
     return render(request, 'hot.html', context)
+
+def details(request, forum_id):
+    forum = get_object_or_404(models.Forum, pk=forum_id)
+    comments = models.Comentary.objects.filter(forum=forum_id)
+    logger.debug(comments)
+    context = {
+        'forum': forum,
+        'comments': comments,
+    }
+    return render(request, 'details.html', context)
