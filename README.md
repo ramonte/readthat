@@ -11,7 +11,7 @@ Forum for readers to share their experiences. Learning Django as well :D
 ## Install
 
 ``` bash
-> pip install django
+> pip install django==1.9
 > pip install mysql
 > pip install mysqlclient
 ```

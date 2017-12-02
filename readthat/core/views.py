@@ -1,10 +1,15 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.db.models import Count
+from django.utils import timezone
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
+
 import logging
 
 from django.contrib.auth.models import User
 
+from . import forms
 from . import models
 
 logger = logging.getLogger(__name__)
@@ -47,3 +52,36 @@ def details(request, forum_id):
         'comments': comments,
     }
     return render(request, 'details.html', context)
+
+def new_post(request):
+    if request.method == 'POST':
+        form = forms.ForumForm(request.POST)
+        if form.is_valid():
+            forum = form.save(commit=False)
+            forum.user = request.user
+            forum.creation = timezone.now()
+            forum.save()
+            ff = get_object_or_404(models.Forum, pk=forum.pk)
+            comments = models.Comentary.objects.filter(forum=forum.pk)
+            context = {
+                'forum': ff,
+                'comments': comments,
+            }
+            return render(request, 'index.html', {})
+    else:
+        form = forms.ForumForm()
+    return render(request, 'new_post.html', {'form': form})
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return render(request, 'menu.html', {})
+    else:
+        form = UserCreationForm()
+    return render(request, 'signup.html', {'form': form})

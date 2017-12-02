@@ -1,0 +1,18 @@
+{% include "menu.html" %}
+
+<div class="row">
+  <div class="col s9">
+    {% block content %}
+    <h5>Entrar</h5>
+    <form method="POST" class="post-form">{% csrf_token %}
+      {{ form.as_p }}
+
+      <button type="submit" class="save">Entrar</button>
+      <button type="reset" class="reset">Limpar</button>
+    </form>
+    {% endblock %}
+  </div>
+  <div class="col s3">
+    {% include "search.html" %}
+  </div>
+</div>
