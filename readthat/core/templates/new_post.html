@@ -4,13 +4,18 @@
   <div class="col s9">
     {% block content %}
     <h5>Nova postagem</h5>
-    {{ request.user }}
-    <form method="POST" class="post-form">{% csrf_token %}
-      {{ form.as_p }}
+    {% if user.is_authenticated %}
+      <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
 
-      <button type="submit" class="save">Salvar</button>
-      <button type="reset" class="reset">Limpar</button>
-    </form>
+        <button type="submit" class="save">Salvar</button>
+        <button type="reset" class="reset">Limpar</button>
+      </form>
+    {% else %}
+      <p>
+        Por favor, cadastre-se para abrir uma nova discussão.
+      </p>
+    {% endif %}
     {% endblock %}
   </div>
   <div class="col s3">

@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import Count
 from django.utils import timezone
 from django.contrib.auth.views import login, logout
+from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.core.urlresolvers import reverse_lazy, reverse
 
@@ -24,7 +25,7 @@ def index(request):
     return render(request, 'menu.html', context)
 
 def new(request):
-    forum = models.Forum.objects.annotate(num_comments=Count('comentary__forum')).order_by('-creation')[:5]
+    forum = models.Forum.objects.annotate(num_comments=Count('comment__forum')).order_by('-creation')[:5]
     context = {
         'forum': forum,
     }
@@ -38,7 +39,7 @@ def top(request):
     return render(request, 'lista.html', context)
 
 def hot(request):
-    forum = models.Forum.objects.annotate(num_comments=Count('comentary__forum')).order_by('-num_comments')[:5]
+    forum = models.Forum.objects.annotate(num_comments=Count('comment__forum')).order_by('-num_comments')[:5]
     context = {
         'forum': forum,
     }
@@ -46,11 +47,21 @@ def hot(request):
 
 def details(request, forum_id):
     forum = get_object_or_404(models.Forum, pk=forum_id)
-    comments = models.Comentary.objects.filter(forum=forum_id)
-    logger.debug(comments)
+    if request.POST:
+        form = forms.CommentForm(request.POST)
+        if form.is_valid:
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.date = timezone.now()
+            comment.forum = forum
+            comment.save()
+    form = forms.CommentForm()
+    form.description = ''
+    comments = models.Comment.objects.filter(forum=forum_id)
     context = {
         'forum': forum,
         'comments': comments,
+        'form': form,
     }
     return render(request, 'details.html', context)
 
@@ -63,7 +74,7 @@ def new_post(request):
             forum.creation = timezone.now()
             forum.save()
             ff = get_object_or_404(models.Forum, pk=forum.pk)
-            comments = models.Comentary.objects.filter(forum=forum.pk)
+            comments = models.Comment.objects.filter(forum=forum.pk)
             context = {
                 'forum': ff,
                 'comments': comments,
@@ -82,7 +93,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return render(request, 'lista.html', {})
+            return render(request, 'menu.html', {})
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})

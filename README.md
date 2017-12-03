@@ -12,6 +12,7 @@ Forum for readers to share their experiences. Learning Django as well :D
 
 ``` bash
 > pip install django==1.9
+> sudo apt-get install libmysqlclient-dev
 > pip install mysql
 > pip install mysqlclient
 ```
@@ -22,6 +23,8 @@ MySQL:
 
 ## Run
 ``` bash
+> python manage.py makemigrations core
+> python manage.py sqlmigrate core 0001
 > python manage.py migrate
 > python manage.py runserver
 ```

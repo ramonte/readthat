@@ -4,13 +4,24 @@
 
 {% if forum %}
     <p>
-      <!-- <b>título:</b> {{ forum.title }} <br /> -->
       <h4 align=center>{{ forum.title }}</h4>
       <b>usuário:</b> {{ forum.user }} <br />
       <b>livro:</b> {{ forum.book.title }} <br />
-      <b>Descrição:</b> {{ forum.description }}
+      <b>Descrição:</b>
+        <br />{{ forum.description }}
     </p>
     <hr />
+    {% if user.is_authenticated %}
+      <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" class="save">Enviar</button>
+      </form>
+      {% else %}
+        <p>
+          Por favor, cadastre-se se quiser fazer algum comentário.
+        </p>
+      {% endif %}
 {% else %}
   <p>
     Erro ao carregar forum.

@@ -24,7 +24,7 @@ class Forum(models.Model):
     description = models.CharField(max_length=600)
     upvotes = models.IntegerField(default=0)
 
-class Comentary(models.Model):
+class Comment(models.Model):
     forum = models.ForeignKey(Forum, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.CharField(max_length=600)

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django import forms
 
 from . import models as m
@@ -23,3 +25,9 @@ class ForumForm(forms.ModelForm):
     class Meta:
         model = m.Forum
         fields = ('author', 'book', 'title', 'description')
+
+class CommentForm(forms.ModelForm):
+    description = forms.CharField(label='Comentário', widget=forms.Textarea(attrs={'cols': 80, 'rows': 20, 'class': 'browser-default'}))
+    class Meta:
+        model = m.Comment
+        fields = ['description']
