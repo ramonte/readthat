@@ -8,7 +8,7 @@
 
 <nav class="nav-extended">
   <div class="nav-wrapper lime lighten-4">
-    <a href="/" class="brand-logo right" style="color: black">READTHAT</a>
+    <a href="/" class="brand-logo center" style="color: black">READTHAT</a>
     <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons" style="color: black">menu</i></a>
     <ul class="left hide-on-med-and-down" id="nav-mobile">
       <li>
@@ -16,7 +16,16 @@
       </li>
       <li><a href="/new" style="color: black">Recentes</a></li>
       <li><a href="/hot" style="color: black">Mais comentados</a></li>
-      <li><a href="/top" style="color: black">Mais joinha</a></li>
+      {# <li><a href="/top" style="color: black">Mais joinha</a></li>#}
+    </ul>
+    <ul class="right">
+      {% if user.is_authenticated %}
+      <li style="color: black">Olá, {{ user.username }}!</li>
+      <li><a href="/logout" style="color: black">Sair</a></li>
+      {% else %}
+      <li><a href="/login" style="color: black">Entrar</a></li>
+      <li><a href="/signup" style="color: black">Cadastrar</a></li>
+      {% endif %}
     </ul>
     <ul class="side-nav" id="mobile-demo">
       <li><a href="#" style="color: black">New</a></li>

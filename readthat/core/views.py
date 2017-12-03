@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import Count
 from django.utils import timezone
-from django.contrib.auth import login, authenticate
+from django.contrib.auth.views import login, logout
 from django.contrib.auth.forms import UserCreationForm
+from django.core.urlresolvers import reverse_lazy, reverse
 
 import logging
 
@@ -27,21 +28,21 @@ def new(request):
     context = {
         'forum': forum,
     }
-    return render(request, 'new.html', context)
+    return render(request, 'lista.html', context)
 
 def top(request):
     forum = models.Forum.objects.order_by('-upvotes')[:5]
     context = {
         'forum': forum,
     }
-    return render(request, 'top.html', context)
+    return render(request, 'lista.html', context)
 
 def hot(request):
     forum = models.Forum.objects.annotate(num_comments=Count('comentary__forum')).order_by('-num_comments')[:5]
     context = {
         'forum': forum,
     }
-    return render(request, 'hot.html', context)
+    return render(request, 'lista.html', context)
 
 def details(request, forum_id):
     forum = get_object_or_404(models.Forum, pk=forum_id)
@@ -67,7 +68,7 @@ def new_post(request):
                 'forum': ff,
                 'comments': comments,
             }
-            return render(request, 'index.html', {})
+            return render(request, 'details.html', context)
     else:
         form = forms.ForumForm()
     return render(request, 'new_post.html', {'form': form})
@@ -81,7 +82,20 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return render(request, 'menu.html', {})
+            return render(request, 'lista.html', {})
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
+
+def login_view(request, *args, **kwargs):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse('new'))
+
+    kwargs['extra_context'] = {'next': reverse('new')}
+    kwargs['template_name'] = 'login.html'
+    return login(request, *args, **kwargs)
+
+
+def logout_view(request, *args, **kwargs):
+    kwargs['next_page'] = reverse('new')
+    return logout(request, *args, **kwargs)
