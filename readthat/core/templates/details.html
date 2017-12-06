@@ -1,13 +1,13 @@
 {% include "menu.html" %}
 
-<div class="lime lighten-5">
+<div>
 
 {% if forum %}
     <p>
-      <h4 align=center>{{ forum.title }}</h4>
-      <b>usuário:</b> {{ forum.user }} <br />
-      <b>livro:</b> {{ forum.book.title }} <br />
-      <b>Descrição:</b>
+      <h4>{{ forum.title }}</h4>
+      <b>usuário:</b> {{ forum.user }} <span style="font-size: 10px">({{ forum.creation }})</span> <br />
+      {# <b>livro:</b> {{ forum.book.title }} <br />#}
+      {# <b>Descrição:</b>#}
         <br />{{ forum.description }}
     </p>
     <hr />
@@ -31,11 +31,13 @@
 <h4>Comentários:</h4>
 {% if comments %}
   {% for comment in comments %}
-    <b>Autor:</b> {{ comment.user }}. <b>Data:</b> {{ comment.date|date:"d/m/Y, H:i:s" }}. <b>Upvotes:</b> {{comment.upvotes }}
+  {# {{ comment.date|date:"d/m/Y, H:i:s" }}.#}
+    {# <b>Autor:</b> {{ comment.user }}. <b>Data:</b> {{ comment.date }}.  <b>Upvotes:</b> {{comment.upvotes }}#}
+    <b>Autor:</b> {{ comment.user }}. <span style="font-size: 10px">({{ comment.date }})</span>.
     <p>
       {{ comment.description }}
     </p>
-
+    <hr style="border-top: 1px dashed; border-bottom: 1px dashed white"/>
   {% endfor %}
 {% else %}
   <p>

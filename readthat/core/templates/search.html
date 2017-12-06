@@ -1,7 +1,7 @@
 <br />
-<form style="border: 1px solid black; padding: 10px 10px 10px 10px">
-  <input type="text" placeholder="O que deseja buscar?" id="search" />
+<form style="border: 1px solid black; padding: 10px 10px 10px 10px" action="{% url 'results' %}" method="get">
+  <input type="text" placeholder="O que deseja buscar?" id="search" name="search"/>
   <div style="text-align: right">
-    <input type="button" value="Buscar"/>
+    <input type="submit" value="Buscar"/>
   </div>
 </form>

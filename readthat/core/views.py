@@ -25,21 +25,21 @@ def index(request):
     return render(request, 'menu.html', context)
 
 def new(request):
-    forum = models.Forum.objects.annotate(num_comments=Count('comment__forum')).order_by('-creation')[:5]
+    forum = models.Forum.objects.annotate(num_comments=Count('comment__forum')).order_by('-creation')
     context = {
         'forum': forum,
     }
     return render(request, 'lista.html', context)
 
 def top(request):
-    forum = models.Forum.objects.order_by('-upvotes')[:5]
+    forum = models.Forum.objects.order_by('-upvotes')
     context = {
         'forum': forum,
     }
     return render(request, 'lista.html', context)
 
 def hot(request):
-    forum = models.Forum.objects.annotate(num_comments=Count('comment__forum')).order_by('-num_comments')[:5]
+    forum = models.Forum.objects.annotate(num_comments=Count('comment__forum')).order_by('-num_comments')
     context = {
         'forum': forum,
     }
@@ -55,6 +55,7 @@ def details(request, forum_id):
             comment.date = timezone.now()
             comment.forum = forum
             comment.save()
+    form = None
     form = forms.CommentForm()
     form.description = ''
     comments = models.Comment.objects.filter(forum=forum_id)
@@ -110,3 +111,12 @@ def login_view(request, *args, **kwargs):
 def logout_view(request, *args, **kwargs):
     kwargs['next_page'] = reverse('new')
     return logout(request, *args, **kwargs)
+
+def results(request):
+    search = request.GET.get('search')
+    forum = models.Forum.objects.annotate(num_comments=Count('comment__forum')).filter(title__icontains=search)
+    forum = forum | models.Forum.objects.annotate(num_comments=Count('comment__forum')).filter(description__icontains=search)
+    context = {
+        'forum': forum,
+    }
+    return render(request, 'results.html', context)
