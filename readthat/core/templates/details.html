@@ -1,48 +1,55 @@
 {% include "menu.html" %}
 
-<div>
+<div class="row">
 
-{% if forum %}
-    <p>
-      <h4>{{ forum.title }}</h4>
-      <b>usuário:</b> {{ forum.user }} <span style="font-size: 10px">({{ forum.creation }})</span> <br />
-      {# <b>livro:</b> {{ forum.book.title }} <br />#}
-      {# <b>Descrição:</b>#}
-        <br />{{ forum.description }}
-    </p>
-    <hr />
-    {% if user.is_authenticated %}
-      <form method="POST" class="post-form">{% csrf_token %}
-        {{ form.as_p }}
-
-        <button type="submit" class="save">Enviar</button>
-      </form>
-      {% else %}
+  <div class="col s9">
+    {% if forum %}
         <p>
-          Por favor, cadastre-se se quiser fazer algum comentário.
+          <h4>{{ forum.title }}</h4>
+          <b>usuário:</b> {{ forum.user }} <span style="font-size: 10px">({{ forum.creation }})</span> <br />
+          {# <b>livro:</b> {{ forum.book.title }} <br />#}
+          {# <b>Descrição:</b>#}
+            <br />{{ forum.description }}
         </p>
-      {% endif %}
-{% else %}
-  <p>
-    Erro ao carregar forum.
-  </p>
-{% endif %}
+        <hr />
+        {% if user.is_authenticated %}
+          <form method="POST" class="post-form">{% csrf_token %}
+            {{ form.as_p }}
 
-<h4>Comentários:</h4>
-{% if comments %}
-  {% for comment in comments %}
-  {# {{ comment.date|date:"d/m/Y, H:i:s" }}.#}
-    {# <b>Autor:</b> {{ comment.user }}. <b>Data:</b> {{ comment.date }}.  <b>Upvotes:</b> {{comment.upvotes }}#}
-    <b>Autor:</b> {{ comment.user }}. <span style="font-size: 10px">({{ comment.date }})</span>.
-    <p>
-      {{ comment.description }}
-    </p>
-    <hr style="border-top: 1px dashed; border-bottom: 1px dashed white"/>
-  {% endfor %}
-{% else %}
-  <p>
-    Ainda não há comentários nesta discussão.
-  </p>
-{% endif %}
+            <button type="submit" class="save">Enviar</button>
+          </form>
+          {% else %}
+            <p>
+              Por favor, cadastre-se se quiser fazer algum comentário.
+            </p>
+          {% endif %}
+    {% else %}
+      <p>
+        Erro ao carregar forum.
+      </p>
+    {% endif %}
+
+    <h4>Comentários:</h4>
+    {% if comments %}
+      {% for comment in comments %}
+      {# {{ comment.date|date:"d/m/Y, H:i:s" }}.#}
+        {# <b>Autor:</b> {{ comment.user }}. <b>Data:</b> {{ comment.date }}.  <b>Upvotes:</b> {{comment.upvotes }}#}
+        <b>Autor:</b> {{ comment.user }}. <span style="font-size: 10px">({{ comment.date }})</span>.
+        <p>
+          {{ comment.description }}
+        </p>
+        <hr style="border-top: 1px dashed; border-bottom: 1px dashed white"/>
+      {% endfor %}
+    {% else %}
+      <p>
+        Ainda não há comentários nesta discussão.
+      </p>
+    {% endif %}
+  </div>
+
+  <div class="col s3">
+    {% include "search.html" %}
+  </div>
+
 
 </div>

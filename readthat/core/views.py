@@ -16,7 +16,6 @@ from . import models
 
 logger = logging.getLogger(__name__)
 
-# Create your views here.
 def index(request):
     users = User.objects.order_by('-id')[:5]
     context = {
@@ -55,10 +54,10 @@ def details(request, forum_id):
             comment.date = timezone.now()
             comment.forum = forum
             comment.save()
-    form = None
+            return HttpResponseRedirect('/posts/' + forum_id)
     form = forms.CommentForm()
     form.description = ''
-    comments = models.Comment.objects.filter(forum=forum_id)
+    comments = models.Comment.objects.filter(forum=forum_id).order_by('date')
     context = {
         'forum': forum,
         'comments': comments,
@@ -80,7 +79,7 @@ def new_post(request):
                 'forum': ff,
                 'comments': comments,
             }
-            return render(request, 'details.html', context)
+            return HttpResponseRedirect('/posts/' + str(forum.pk))
     else:
         form = forms.ForumForm()
     return render(request, 'new_post.html', {'form': form})
@@ -94,7 +93,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return render(request, 'menu.html', {})
+            return HttpResponseRedirect('/new')
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
