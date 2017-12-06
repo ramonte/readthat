@@ -9,7 +9,7 @@
     <p >
       <a href="{% url 'details' f.id %}">{{ f.title }}</a>, por {{ f.user }}. <span style="font-size:10px">({{ f.creation }})</span> <br />
       <b>Comentários:</b> {{ f.num_comments }} <br />
-      <b>Upvotes:</b> {{ f.upvotes }}
+      {# <b>Upvotes:</b> {{ f.upvotes }}#}
     </p>
     <hr style="border-top: 1px dashed; border-bottom: 1px dashed white"/>
   {% endfor %}
